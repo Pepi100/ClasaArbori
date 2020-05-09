@@ -6,6 +6,16 @@ using namespace std;
 ifstream fin("Arbori.in");
 ofstream fout("Arbori.out");
 
+bool ePrim(int n) {
+    if (n == 1 || n == 0) return false;
+    if (n == 2)return true;
+    for (int i = 2; i * i <= n; i++)
+        if (n % i == 0) return false;
+    return true;
+}
+
+
+
 class ArboreBinar {
 public:
     int marime;
@@ -17,7 +27,7 @@ public:
     //stanga[i] este nodul din stanga nodului numerotat cu i
     //dreapta[i] este nodul din dreapta nodului numerotat cu i
     //valoare[i] valoarea stocata in nodul i
-    // i=numarul de ordine al fiecarui nod
+    //i=numarul de ordine al fiecarui nod
 
     ArboreBinar(int marime){
         this->marime = marime;
@@ -51,6 +61,9 @@ public:
             fin >> this->dreapta[i];
         }
     }
+
+  
+
 
     void afisareFrunze() {
         for (int i = 1; i <= this->marime; i++)
@@ -136,6 +149,35 @@ public:
 
     }
 
+    int nrNoduri(int radacina) {
+       
+        if (this->stanga[radacina] == 0 && this->dreapta[radacina] == 0) return 1;
+        if (this->stanga[radacina] == 0 ) return nrNoduri(this->dreapta[radacina]) + 1;
+        if (this->dreapta[radacina] == 0) return nrNoduri(this->stanga[radacina]) + 1;
+
+
+        return nrNoduri(this->stanga[radacina]) + nrNoduri(this->dreapta[radacina]) + 1;
+    }
+
+    int nrNoduriPrime(int radacina) {
+        int primeSt = 0, primeDr = 0;
+
+        if (this->stanga[radacina] != 0)
+           primeSt= this->nrNoduriPrime(stanga[radacina]);
+
+        if (this->dreapta[radacina] != 0)
+            primeDr = this->nrNoduriPrime(dreapta[radacina]);
+
+        return primeSt + primeDr + this->nodPrim(radacina);
+
+    }
+
+    private:
+        int nodPrim(int nrNod) {
+            if (ePrim(this->valoare[nrNod])) { return 1; cout << "1"; }
+            return 0;
+
+        }
 
 
 
@@ -146,12 +188,17 @@ public:
 
 int main()
 {
-    int n;
+    int n,k;
     fin >> n;
     ArboreBinar x(n);
     x.citireXStDr();
-    x.determinareIndiceRadacina();
-   fout<<x.diferentaSubarbori(x.radacina);
+    fin >> k;
+    int a;
+    for (int i = 1; i <= k; i++) {
+        fin >> a;
+        fout << x.nrNoduriPrime(a) << endl;
+    }
+    
 
  
 
