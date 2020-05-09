@@ -88,14 +88,10 @@ public:
 
         if (this->dreapta[radacina] != 0)
             this->afisareValoriPreodrine(dreapta[radacina]);
-        
-
-    
     }
 
     void afisareValoriInodrine(int radacina) {
         
-
         if (this->stanga[radacina] != 0)
             this->afisareValoriInodrine(stanga[radacina]);
         
@@ -103,10 +99,43 @@ public:
 
         if (this->dreapta[radacina] != 0)
             this->afisareValoriInodrine(dreapta[radacina]);
+    }
 
-        
+    void afisareValoriPostordine(int radacina) {
+        if (this->stanga[radacina] != 0)
+            this->afisareValoriPostordine(stanga[radacina]);
+
+        if (this->dreapta[radacina] != 0)
+            this->afisareValoriPostordine(dreapta[radacina]);
+
+        fout << this->valoare[radacina] << " ";
+    }
+
+    int sumaValori(int radacina) {
+        int sumst = 0;
+        int sumdr = 0;
+        if (this->stanga[radacina] != 0)
+            sumst = this->sumaValori(stanga[radacina]);
+
+        if (this->dreapta[radacina] != 0)
+            sumdr = this->sumaValori(dreapta[radacina]);
+
+        return this->valoare[radacina] + sumst + sumdr;
+    }
+
+
+    int diferentaSubarbori(int radacina) {
+        //aceasta functie va calcula diferenta in valoare absoluta dintre subarborele stand si cel drept;
+
+        int sumst = sumaValori(this->stanga[radacina]);
+        int sumdr = sumaValori(this->dreapta[radacina]);
+
+        int dif = sumst - sumdr;
+        dif = abs(dif);
+        return dif;
 
     }
+
 
 
 
@@ -122,7 +151,7 @@ int main()
     ArboreBinar x(n);
     x.citireXStDr();
     x.determinareIndiceRadacina();
-   x.afisareValoriInodrine(x.radacina);
+   fout<<x.diferentaSubarbori(x.radacina);
 
  
 
