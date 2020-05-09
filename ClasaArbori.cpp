@@ -93,6 +93,21 @@ public:
     
     }
 
+    void afisareValoriInodrine(int radacina) {
+        
+
+        if (this->stanga[radacina] != 0)
+            this->afisareValoriInodrine(stanga[radacina]);
+        
+        fout << this->valoare[radacina] << " ";
+
+        if (this->dreapta[radacina] != 0)
+            this->afisareValoriInodrine(dreapta[radacina]);
+
+        
+
+    }
+
 
 
 
@@ -107,7 +122,7 @@ int main()
     ArboreBinar x(n);
     x.citireXStDr();
     x.determinareIndiceRadacina();
-   x.afisareValoriPreodrine(x.radacina);
+   x.afisareValoriInodrine(x.radacina);
 
  
 
