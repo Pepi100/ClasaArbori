@@ -39,26 +39,26 @@ public:
 
     void citireStanga() {
         for (int i = 1; i <= this->marime; i++)
-            fin >> this->stanga[i];
+            fin >> stanga[i];
     }
 
     void citireDreapta() {
         for (int i = 1; i <= this->marime; i++)
-            fin >> this->dreapta[i];
+            fin >> dreapta[i];
     }
 
     void citireValori() {
         for (int i = 1; i <= this->marime; i++)
-            fin >> this->valoare[i];
+            fin >> valoare[i];
     }
 
 
     void citireXStDr() {
         // la citirea X st dr, sunt necesare n (marime) linii, pe fiecare se regaseste valoarea din nodul i, nodul din stanga lui i si nodul din dreapta lui i
-        for (int i = 1; i <= this->marime; i++) {
-            fin >> this->valoare[i];
-            fin >> this->stanga[i];
-            fin >> this->dreapta[i];
+        for (int i = 1; i <= marime; i++) {
+            fin >> valoare[i];
+            fin >> stanga[i];
+            fin >> dreapta[i];
         }
     }
 
@@ -66,82 +66,82 @@ public:
 
 
     void afisareFrunze() {
-        for (int i = 1; i <= this->marime; i++)
-            if (this->stanga[i] == 0 && this->dreapta[i] == 0) fout << i << " ";
+        for (int i = 1; i <= marime; i++)
+            if (stanga[i] == 0 && dreapta[i] == 0) fout << i << " ";
     }
     void afisareValoriFrunze() {
         for (int i = 1; i <= this->marime; i++)
-            if (this->stanga[i] == 0 && this->dreapta[i] == 0) fout << this->valoare[i] << " ";
+            if (stanga[i] == 0 && dreapta[i] == 0) fout << valoare[i] << " ";
     }
 
     void determinareIndiceRadacina() {
         //radacina va fi nodul care nu apare nici in vectorul stanga si nici in dreapta
         //aceasta functie determina radacina si o salveaza in variabila .radacina
-        int size = this->marime + 1;
+        int size = marime + 1;
        
         int *v=new int[size];
 
-        for (int i = 1; i <= this->marime; i++) {
-            v[this->stanga[i]] = 1;
-            v[this->dreapta[i]] = 1;
+        for (int i = 1; i <=marime; i++) {
+            v[stanga[i]] = 1;
+            v[dreapta[i]] = 1;
         }
-        for(int i=1;i<=this->marime;i++)
+        for(int i=1;i<=marime;i++)
             if (v[i] != 1) {
-                this->radacina = i;
+                radacina = i;
                 return;
             }
             
     }
 
     void afisareValoriPreodrine(int radacina) {
-        fout << this->valoare[radacina]<<" ";
+        fout << valoare[radacina]<<" ";
 
-        if (this->stanga[radacina] != 0) 
-            this->afisareValoriPreodrine(stanga[radacina]);
+        if (stanga[radacina] != 0) 
+            afisareValoriPreodrine(stanga[radacina]);
 
-        if (this->dreapta[radacina] != 0)
-            this->afisareValoriPreodrine(dreapta[radacina]);
+        if (dreapta[radacina] != 0)
+            afisareValoriPreodrine(dreapta[radacina]);
     }
 
     void afisareValoriInodrine(int radacina) {
         
-        if (this->stanga[radacina] != 0)
-            this->afisareValoriInodrine(stanga[radacina]);
+        if (stanga[radacina] != 0)
+            afisareValoriInodrine(stanga[radacina]);
         
-        fout << this->valoare[radacina] << " ";
+        fout << valoare[radacina] << " ";
 
-        if (this->dreapta[radacina] != 0)
-            this->afisareValoriInodrine(dreapta[radacina]);
+        if (dreapta[radacina] != 0)
+            afisareValoriInodrine(dreapta[radacina]);
     }
 
     void afisareValoriPostordine(int radacina) {
-        if (this->stanga[radacina] != 0)
-            this->afisareValoriPostordine(stanga[radacina]);
+        if (stanga[radacina] != 0)
+            afisareValoriPostordine(stanga[radacina]);
 
-        if (this->dreapta[radacina] != 0)
-            this->afisareValoriPostordine(dreapta[radacina]);
+        if (dreapta[radacina] != 0)
+            afisareValoriPostordine(dreapta[radacina]);
 
-        fout << this->valoare[radacina] << " ";
+        fout <<valoare[radacina] << " ";
     }
 
     int sumaValori(int radacina) {
         int sumst = 0;
         int sumdr = 0;
-        if (this->stanga[radacina] != 0)
-            sumst = this->sumaValori(stanga[radacina]);
+        if (stanga[radacina] != 0)
+            sumst = sumaValori(stanga[radacina]);
 
-        if (this->dreapta[radacina] != 0)
-            sumdr = this->sumaValori(dreapta[radacina]);
+        if (dreapta[radacina] != 0)
+            sumdr = sumaValori(dreapta[radacina]);
 
-        return this->valoare[radacina] + sumst + sumdr;
+        return valoare[radacina] + sumst + sumdr;
     }
 
 
     int diferentaSubarbori(int radacina) {
         //aceasta functie va calcula diferenta in valoare absoluta dintre subarborele stand si cel drept;
 
-        int sumst = sumaValori(this->stanga[radacina]);
-        int sumdr = sumaValori(this->dreapta[radacina]);
+        int sumst = sumaValori(stanga[radacina]);
+        int sumdr = sumaValori(dreapta[radacina]);
 
         int dif = sumst - sumdr;
         dif = abs(dif);
@@ -151,30 +151,30 @@ public:
 
     int nrNoduri(int radacina) {
        
-        if (this->stanga[radacina] == 0 && this->dreapta[radacina] == 0) return 1;
-        if (this->stanga[radacina] == 0 ) return nrNoduri(this->dreapta[radacina]) + 1;
-        if (this->dreapta[radacina] == 0) return nrNoduri(this->stanga[radacina]) + 1;
+        if (stanga[radacina] == 0 && dreapta[radacina] == 0) return 1;
+        if (stanga[radacina] == 0 ) return nrNoduri(dreapta[radacina]) + 1;
+        if (dreapta[radacina] == 0) return nrNoduri(stanga[radacina]) + 1;
 
 
-        return nrNoduri(this->stanga[radacina]) + nrNoduri(this->dreapta[radacina]) + 1;
+        return nrNoduri(stanga[radacina]) + nrNoduri(dreapta[radacina]) + 1;
     }
 
     int nrNoduriPrime(int radacina) {
         int primeSt = 0, primeDr = 0;
 
         if (this->stanga[radacina] != 0)
-           primeSt= this->nrNoduriPrime(stanga[radacina]);
+           primeSt= nrNoduriPrime(stanga[radacina]);
 
         if (this->dreapta[radacina] != 0)
-            primeDr = this->nrNoduriPrime(dreapta[radacina]);
+            primeDr = nrNoduriPrime(dreapta[radacina]);
 
-        return primeSt + primeDr + this->nodPrim(radacina);
+        return primeSt + primeDr + nodPrim(radacina);
 
     }
 
     private:
         int nodPrim(int nrNod) {
-            if (ePrim(this->valoare[nrNod])) { return 1; cout << "1"; }
+            if (ePrim(valoare[nrNod])) { return 1; cout << "1"; }
             return 0;
 
         }
