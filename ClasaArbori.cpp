@@ -22,7 +22,9 @@ public:
     int radacina=0;
     int *stanga;
     int *dreapta;
-    int* valoare;
+    int *valoare;
+    int *nivel;
+    int nivelmax = 1;
     //in aceasta implementare:
     //stanga[i] este nodul din stanga nodului numerotat cu i
     //dreapta[i] este nodul din dreapta nodului numerotat cu i
@@ -35,6 +37,7 @@ public:
         this->stanga = new int[marime + 1];
         this->dreapta = new int[marime + 1];
         this->valoare = new int[marime + 1];
+        this->nivel = new int[marime + 1];
     }
 
     void citireStanga() {
@@ -62,7 +65,6 @@ public:
         }
     }
 
-  
 
 
     void afisareFrunze() {
@@ -171,6 +173,28 @@ public:
         return primeSt + primeDr + nodPrim(radacina);
 
     }
+    void setNivel(int radacina, int nivel) {
+        //voi considera radacina pe nivelulul 1;
+        this->nivel[radacina] = nivel;
+        if (nivel > nivelmax)nivelmax = nivel;
+        if (stanga[radacina] != 0) {
+            setNivel(stanga[radacina], nivel + 1);
+        }
+        if (dreapta[radacina] != 0) {
+            setNivel(dreapta[radacina], nivel + 1);
+        }
+
+    }
+    void afisareCardinaliNivele() {
+        for(int i=1;i<=nivelmax;i++){
+            int a = 0;
+            for (int j = 1; j <= marime; j++) {
+                if (nivel[j] == i)a++;
+            }
+            fout << a << " ";
+        }
+    }
+
 
     private:
         int nodPrim(int nrNod) {
@@ -182,25 +206,21 @@ public:
 
 
 
+
 };
 
 
 
 int main()
 {
-    int n,k;
+    int n;
     fin >> n;
     ArboreBinar x(n);
     x.citireXStDr();
-    fin >> k;
-    int a;
-    for (int i = 1; i <= k; i++) {
-        fin >> a;
-        fout << x.nrNoduriPrime(a) << endl;
-    }
-    
-
- 
+    x.determinareIndiceRadacina();
+    x.setNivel(x.radacina, 1);
+    fout << x.nivelmax << endl;
+    x.afisareCardinaliNivele();
 
   
 
