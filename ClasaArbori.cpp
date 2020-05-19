@@ -1,6 +1,7 @@
 // In acest proiect vom crea o clasa de arbori binari
 #include <iostream>
 #include <fstream>
+#include <algorithm>
 using namespace std;
 
 ifstream fin("Arbori.in");
@@ -72,8 +73,16 @@ public:
             if (stanga[i] == 0 && dreapta[i] == 0) fout << i << " ";
     }
     void afisareValoriFrunze() {
-        for (int i = 1; i <= this->marime; i++)
-            if (stanga[i] == 0 && dreapta[i] == 0) fout << valoare[i] << " ";
+        int* x = new int[marime + 1];
+        int p = 0;
+        for (int i = 1; i <= marime; i++)
+            if (stanga[i] == 0 && dreapta[i] == 0) {
+                x[++p] = valoare[i];
+            }
+        sort(x+1, x+p+1);
+
+        for (int i = 1; i <= p; i++)
+            fout << x[i] << " ";
     }
 
     void determinareIndiceRadacina() {
@@ -208,6 +217,32 @@ public:
         else return 0;
 
     }
+    int nrNod(int radacina) {
+        //this functions counts the number of nodes witn only one descendent;
+        if (radacina == 0)return 0;
+
+        if (int(bool(stanga[radacina])) + int(bool(dreapta[radacina])) == 1)
+            return 1 + nrNod(stanga[radacina]) + nrNod(dreapta[radacina]);
+        else return nrNod(stanga[radacina]) + nrNod(dreapta[radacina]);
+    }
+
+    int maxVal(int radacina) {
+        if (radacina == 0)return 0;
+        int m = max(maxVal(stanga[radacina]), maxVal(dreapta[radacina]));
+
+            if (m > valoare[radacina])return m;
+        return valoare[radacina];
+
+    }
+
+    int levelSum( int level) {
+        //must be run after setNivel;
+        int s = 0;
+        for (int i = 1; i <= marime; i++) {
+            if (nivel[i] == level) s+= valoare[i];
+        }
+        return s;
+    }
 
     private:
         int nodPrim(int nrNod) {
@@ -229,8 +264,14 @@ int main()
     ArboreBinar x(1001);
     x.marime = 0;
     x.citireLant();
+    int k;
+    fin >> k;
     x.determinareIndiceRadacina();
-    x.afisareValoriPreodrine(x.radacina);
+    x.setNivel(x.radacina,0);
+    fout << x.levelSum(k);
+
+
+    
   
 
 
