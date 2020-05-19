@@ -171,8 +171,8 @@ public:
             primeDr = nrNoduriPrime(dreapta[radacina]);
 
         return primeSt + primeDr + nodPrim(radacina);
-
     }
+
     void setNivel(int radacina, int nivel) {
         //voi considera radacina pe nivelulul 1;
         this->nivel[radacina] = nivel;
@@ -195,6 +195,19 @@ public:
         }
     }
 
+    int citireLant() {
+        int x;
+        fin >> x;
+        if (x != 0) {
+            int p = ++marime;
+            valoare[p] = x;
+            stanga[p] = citireLant();
+            dreapta[p] = citireLant();
+            return p;
+        }
+        else return 0;
+
+    }
 
     private:
         int nodPrim(int nrNod) {
@@ -213,15 +226,11 @@ public:
 
 int main()
 {
-    int n;
-    fin >> n;
-    ArboreBinar x(n);
-    x.citireXStDr();
+    ArboreBinar x(1001);
+    x.marime = 0;
+    x.citireLant();
     x.determinareIndiceRadacina();
-    x.setNivel(x.radacina, 1);
-    fout << x.nivelmax << endl;
-    x.afisareCardinaliNivele();
-
+    x.afisareValoriPreodrine(x.radacina);
   
 
 
