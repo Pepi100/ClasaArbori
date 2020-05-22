@@ -36,8 +36,11 @@ public:
         this->marime = marime;
 
         this->stanga = new int[marime + 1];
+        for (int i = 1; i <= marime; i++) stanga[i] = 0;
         this->dreapta = new int[marime + 1];
+        for (int i = 1; i <= marime; i++) dreapta[i] = 0;
         this->valoare = new int[marime + 1];
+        for (int i = 1; i <= marime; i++) valoare[i] = 0;
         this->nivel = new int[marime + 1];
     }
 
@@ -114,15 +117,15 @@ public:
             afisareValoriPreodrine(dreapta[radacina]);
     }
 
-    void afisareValoriInodrine(int radacina) {
+    void afisareValoriInordine(int radacina) {
         
         if (stanga[radacina] != 0)
-            afisareValoriInodrine(stanga[radacina]);
+            afisareValoriInordine(stanga[radacina]);
         
         fout << valoare[radacina] << " ";
 
         if (dreapta[radacina] != 0)
-            afisareValoriInodrine(dreapta[radacina]);
+            afisareValoriInordine(dreapta[radacina]);
     }
 
     void afisareValoriPostordine(int radacina) {
@@ -194,6 +197,7 @@ public:
         }
 
     }
+
     void afisareCardinaliNivele() {
         for(int i=1;i<=nivelmax;i++){
             int a = 0;
@@ -215,8 +219,18 @@ public:
             return p;
         }
         else return 0;
-
     }
+
+    void creareBST() {
+        radacina = 1;
+        fin >> valoare[1];
+
+        for (int i = 2; i <= marime; i++) {
+            fin >> valoare[i];
+            BST(i,radacina);
+        }
+    }
+
     int nrNod(int radacina) {
         //this functions counts the number of nodes witn only one descendent;
         if (radacina == 0)return 0;
@@ -243,32 +257,64 @@ public:
         }
         return s;
     }
+    int minimPrim(int radacina) {
+        if (radacina == 0) return 999999999;
+        int s = minimPrim(stanga[radacina]);
+        int d = minimPrim(dreapta[radacina]);
+        s = min(s, d);
+        if (nodPrim(radacina) == 1)
+            s = min(s, valoare[radacina]);
+        return s;
 
+
+    }
+
+    void parcurgereNivel(){
+    //must be run afte setNivel
+        for (int i = 1; i <= nivelmax; i++) {
+            for (int j = 1; j <= marime; j++) {
+                if (nivel[j] == i)fout << valoare[j] << " ";
+            }
+        }
+        fout << '\n';
+    
+    }
+    
+    
     private:
-        int nodPrim(int nrNod) {
-            if (ePrim(valoare[nrNod])) { return 1; cout << "1"; }
-            return 0;
+        void BST(int indice, int radacina) {
+            if (valoare[indice] <= valoare[radacina]) {
+                if (stanga[radacina] == 0) {
+                    stanga[radacina] = indice;
+                }
+                else BST(indice, stanga[radacina]);
+            }
+            else {
+                if (dreapta[radacina] == 0) {
+                    dreapta[radacina] = indice;
+                }
+                else BST(indice, dreapta[radacina]);
+            }
 
         }
 
+        
+        int nodPrim(int nrNod) {
+            if (ePrim(valoare[nrNod])) { return 1; }
+            return 0;
 
-
-
-
+        }
 };
 
 
 
 int main()
 {
-    ArboreBinar x(1001);
-    x.marime = 0;
-    x.citireLant();
-    int k;
-    fin >> k;
-    x.determinareIndiceRadacina();
-    x.setNivel(x.radacina,0);
-    fout << x.levelSum(k);
+    int n;
+    fin >> n;
+    ArboreBinar x(n);
+    x.creareBST();
+    x.afisareValoriInordine(x.radacina);
 
 
     
